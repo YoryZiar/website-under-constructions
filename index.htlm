@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Dalam Pembangunan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: { 400: '#22d3ee', 500: '#06b6d4', 900: '#164e63' }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'spin-reverse': 'spin 6s linear infinite reverse',
+                        'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+                        'blink': 'blink 1s step-end infinite'
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 0.5, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.05)', boxShadow: '0 0 20px 5px rgba(34, 211, 238, 0.4)' }
+                        },
+                        'blink': {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: 0 }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Mencegah scrollbar muncul saat animasi */
+        body { overflow: hidden; }
+        .scanline {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(34, 211, 238, 0.1) 50%, rgba(255,255,255,0));
+            background-size: 100% 8px;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-300 min-h-screen flex flex-col items-center justify-center font-mono selection:bg-cyan-500 selection:text-white relative">
+
+    <!-- Efek Scanline Terminal -->
+    <div class="absolute inset-0 pointer-events-none scanline opacity-30 z-50"></div>
+
+    <!-- Latar Belakang Cahaya -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-900/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <main class="z-10 flex flex-col items-center text-center w-full max-w-3xl px-6">
+        
+        <!-- Animasi Core AI -->
+        <div class="relative w-40 h-40 mb-12 flex justify-center items-center">
+            <!-- Lingkaran Luar -->
+            <div class="absolute inset-0 border-t-2 border-r-2 border-cyan-500/40 rounded-full animate-spin-slow"></div>
+            <!-- Lingkaran Tengah -->
+            <div class="absolute inset-4 border-b-2 border-l-2 border-blue-500/50 rounded-full animate-spin-reverse"></div>
+            <!-- Core Inti -->
+            <div class="absolute inset-10 bg-cyan-500/20 rounded-full animate-pulse-glow flex items-center justify-center backdrop-blur-sm border border-cyan-400/30">
+                <div class="w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]"></div>
+            </div>
+            
+            <!-- Ornamen Dekoratif -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-2 h-2 bg-cyan-400 rounded-full"></div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2 w-2 h-2 bg-cyan-400 rounded-full"></div>
+        </div>
+
+        <!-- Tipografi -->
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 tracking-[0.2em] uppercase">
+            Protocol <span class="text-cyan-400">Initiated</span>
+        </h1>
+        
+        <!-- Efek Terminal Typing -->
+        <div class="h-16 mb-8 text-cyan-300/80 text-sm md:text-base">
+            <span id="terminal-text"></span><span class="animate-blink inline-block w-2 h-5 bg-cyan-400 align-middle ml-1"></span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full max-w-md bg-gray-900 rounded-full h-1.5 mb-2 border border-gray-800 overflow-hidden relative">
+            <div class="bg-cyan-500 h-1.5 rounded-full absolute left-0 top-0 shadow-[0_0_10px_#22d3ee] animate-[loading_4s_ease-in-out_infinite]" style="width: 45%;"></div>
+        </div>
+        <div class="flex justify-between w-full max-w-md text-xs text-gray-500 tracking-widest uppercase">
+            <span>Sistem Core</span>
+            <span>45% Terpasang</span>
+        </div>
+
+    </main>
+
+    <!-- Footer Interaktif -->
+    <footer class="absolute bottom-6 w-full text-center text-xs text-gray-600 tracking-[0.3em]">
+        <p>SYS.ADM: YORYZIAR // <span class="text-cyan-500/50" id="clock"></span></p>
+    </footer>
+
+    <!-- Script Animasi Terminal & Jam -->
+    <script>
+        // Animasi Mengetik (Typing Effect)
+        const textArray = [
+            "Menghubungkan ke server utama...",
+            "Mengonfigurasi modul antarmuka...",
+            "Menyiapkan lingkungan pengembangan...",
+            "Sistem sedang dalam tahap pembangunan. Harap tunggu."
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const terminalElement = document.getElementById('terminal-text');
+
+        function typeEffect() {
+            const currentText = textArray[textIndex];
+            
+            if (isDeleting) {
+                terminalElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                terminalElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 30 : 70;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = 2000; // Jeda saat teks selesai diketik
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % textArray.length;
+                typeSpeed = 500; // Jeda sebelum mengetik kalimat baru
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        // Script Jam Real-Time
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', () => {
+            typeEffect();
+            updateClock();
+            setInterval(updateClock, 1000);
+        });
+    </script>
+</body>
+</html>
